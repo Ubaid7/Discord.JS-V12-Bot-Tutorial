@@ -111,7 +111,7 @@ module.exports = (client, commandOptions) => {
 
         arguments.shift()
 
-        // Command Has Correct Argument
+        // Command Has Correct Arguments
         if (
           arguments.length < minArgs ||
           (maxArgs !== null && arguments.length > maxArgs)
