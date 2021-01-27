@@ -10,12 +10,12 @@ for(const file of commandFiles){
 }
 
 const { prefix, token } = require('./config.json')
-const welcome = require('./commands/welcome');
+const welcome = require('./commands/welcome'); // Add This
 
 
 client.once('ready', () => {
     console.log('Ready.')
-    welcome(client)
+    welcome(client) // Add This
 })
 
 client.on('message', message => {
