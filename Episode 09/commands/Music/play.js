@@ -4,8 +4,8 @@ const youtube = require('youtube-sr')
 const ytpl = require('@distube/ytpl')
 
 module.exports = {
-    commands: ['play', 'pl'],
-    description: 'Plays Music',
+    commands: ['play', 'pl'], // You Can Keep Any Name
+    description: 'Plays Music', // Optional
 
     callback: async(message, args) => {
 
@@ -59,24 +59,24 @@ module.exports = {
     }
 
     if(ytRegex.test(argument) && plRegex.test(argument)) {
-        message.reply('Song Is Being Loaded, Wait').then(async message => {
+        message.reply('Songs Are Being Loaded, Wait...').then(async message => {
             // If Music Is PlayList:- PlayList Info
             if(!serverQueue) { message.client.queue.set(message.guild.id, queueConstruct) }
             try{
                 const playlist = await ytpl(argument)
-                for(vid in playlist.items) {
+                for(video in playlist.items) {
                     let plSong = playlist.items[video] // Videos In PlayList
                     let song = createSong(Util.escapeMarkdown(plSong.title), plSong.url, plSong.duration,
                     plSong.thumbnail)
                     playSong(song, message, channel, serverQueue, true)
                 }
-                const PlaylistInfo = {
-                    title: playlist.title.charAT(0).toUpperCase() + playlist.title.slice(1),
+                const playlistInfo = {
+                    title: playlist.title.charAt(0).toUpperCase() + playlist.title.slice(1),
                     url: playlist.url,
                     thumbnail: playlist.items[0].thumbnail,
                     duration: 'Its A PlayList, So No Duration.'
                 }
-                message.channel.send(announce(PlaylistInfo, false, true))
+                message.channel.send(announce(playlistInfo, false, true))
                 return message.delete()
             }
             catch (e) {
@@ -100,7 +100,7 @@ module.exports = {
         else {
             // If Music Is Searched By Name
             let songInfo = await youtube.searchOne(argument)
-            if(songInfo === null) { return message.reply('Mo Results Found.') }
+            if(songInfo === null) { return message.reply('No Results Found.') }
             song  = createSong(Util.escapeMarkdown(songInfo.title), songInfo.url, songInfo.durationFormatted, songInfo.thumbnail.url)
         }
         playSong(song, message, channel, serverQueue, false)
@@ -116,32 +116,33 @@ module.exports = {
         queueConstruct.songs.push(song)
 
         const play = async song => {
-            const queue = message.client.queue.get(message.guild.id)
-            if(!song) { // If Music Is Finished
-                message.guild.me.voice.channel.leave()
-                message.client.queue.delete(message.guild.id)
-                return
+            const queue = message.client.queue.get(message.guild.id);
+            if (!song) {
+                message.guild.me.voice.channel.leave();
+                message.client.queue.delete(message.guild.id);
+                return;
             }
             let stream = ytdl(song.url, {
                 filter: "audioonly",
                 quality: "highestaudio"
-            })
+            });
 
-            const dispatcher = queue.connection.play(stream)
-            .on('finish', () => {
-                if(queue.repeatMode === 0) { queue.songs.shift() }
-                else if (queue.repeatMode === 2) { queue.songs.push(queue.songs.shift()) }
-                else { null }
-                play(queue.songs[0])
-            })
-            .on('error', error => console.error(error))
-            dispatcher.setVolumeLogarithmic(queue.volume / 100)
-            if(!ifPlaylist) { queue.textChannel.send(announce(song, true, false)) }
-        }
-        try{
-            const connection = await channel.join()
-            queueConstruct.connection = connection
-            play(queueConstruct.songs[0])
+            const dispatcher = queue.connection.play(stream) 
+                .on('finish', () => {
+                    if (queue.repeatMode === 0) { queue.songs.shift(); }
+                    else if (queue.repeatMode === 2) { queue.songs.push(queue.songs.shift()); }
+                    else { null; }
+                    play(queue.songs[0]);
+                })
+                .on('error', error => console.error(error));
+            dispatcher.setVolumeLogarithmic(queue.volume / 100);
+            if (!ifPlaylist) { queue.textChannel.send(announce(song, true, false)); }
+        };
+
+        try {
+            const connection = await channel.join();
+            queueConstruct.connection = connection;
+            play(queueConstruct.songs[0]);
         } catch (error) {
             console.error(`I Could't Join VC.\nError: ${error}`)
             message.client.queue.delete(message.guild.id)
