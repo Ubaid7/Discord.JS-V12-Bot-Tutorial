@@ -6,6 +6,7 @@ client.queue = new Discord.Collection()
 const { token } = require('./config.json')
 const welcome = require('./commands/Mod/welcome');
 const loadCommands = require('./commands/load-commands');
+const suggest = require('./commands/Fun/suggest'); // Add This
 
 client.once('ready', () => {
     console.log('Ready.')
@@ -22,6 +23,7 @@ client.once('ready', () => {
 
     welcome(client)
     loadCommands(client)
+    suggest(client) // Add This
 })
 
 client.on('voiceStateUpdate', (old, New) => {
