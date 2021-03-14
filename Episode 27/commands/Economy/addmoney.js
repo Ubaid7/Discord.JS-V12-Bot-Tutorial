@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js')
-const db = require('quick.db')
+const db = require('quick.db') // npm i quick.db
 
 module.exports = {
     commands: ['add-money', 'addmoney'], // You Can Keep Any Name
