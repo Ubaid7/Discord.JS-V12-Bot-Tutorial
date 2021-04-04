@@ -9,7 +9,7 @@ module.exports = (client) => {
         if(message.channel.id === channel){
             if(message.attachments.size > 0) return message.reply('I Cant read Images') // If Images Are Sent
             else {
-                fetch(`http://api.brainshop.ai/get?bid=155450&key=SuXtqU9H9S9NyAdR&uid=1&msg=${encodeURIComponent(message)}`).then(res => res.json()) // Get API URL From https://brainshop.ai/ // Dont Show AnyOne API URL, Its Same As Token For BOT
+                fetch(`API_URL${encodeURIComponent(message)}`).then(res => res.json()) // Get API URL From https://brainshop.ai/ // Dont Show AnyOne API URL, Its Same As Token For BOT
                 .then(data => {
                     message.channel.send(`> ${message}\n${data.cnt}`)
                 })
