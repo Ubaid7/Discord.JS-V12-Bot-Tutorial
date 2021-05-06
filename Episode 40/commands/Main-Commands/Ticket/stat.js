@@ -12,7 +12,7 @@ module.exports = {
         const closed = db.fetch(`ticket-user-closed_${user.id}`) // To Get Ticket Which Were Closed
         const opened = total - closed // Using Maths We Get Opened Tickets
 
-        const embed = new MessageEmbed()
+        const embed = new MessageEmbed() // Send As Embed
         .setAuthor(`Ticket Stats`, user.user.displayAvatarURL({ dynamic: true }))
         .setTimestamp()
         .setColor('RANDOM')
