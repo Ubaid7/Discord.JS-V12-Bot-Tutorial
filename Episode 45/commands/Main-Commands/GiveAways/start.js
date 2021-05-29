@@ -55,7 +55,7 @@ module.exports = (client) => {
                         minutes: 'minutes',
                         hours: 'hours',
                         days: 'days',
-                        plurals: false
+                        plurals: false,
                     }
                 }
             })
