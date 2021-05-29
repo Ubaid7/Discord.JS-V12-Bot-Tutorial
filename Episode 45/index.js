@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const client = new Discord.Client({partials: ['MESSAGE', 'USER', 'REACTION']});
 
-client.queue = new Discord.Collection()  
+client.queue = new Discord.Collection()
 
 const { token } = require('./config.json')
 const welcome = require('./commands/Main-Commands/Mod/welcome');
