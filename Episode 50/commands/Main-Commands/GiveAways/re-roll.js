@@ -1,5 +1,6 @@
 const { GiveawaysManager } = require('discord-giveaways') // npm i discord-giveaways
 const db = require('quick.db')
+
 module.exports = (client) => {
     const manager = new GiveawaysManager(client, {
         storage: '../../../giveaway.json', // Storing Data
@@ -16,16 +17,14 @@ module.exports = (client) => {
         const prefix = db.fetch(`prefix_${message.guild.id}`) // You Can Do const prefix = '+' Also
         const args = message.content.substring(prefix.lenght).split(' ')
         switch (args[0]) {
-            case `${prefix}gend`: // Start GiveAway Command
+            case `${prefix}greroll`: // Re-Roll GiveAway Command
             if(!message.member.hasPermission('MANAGE_MESSAGES')) return message.reply(`You Don't Have Permission To Use This`) // If User Has No Permission
 
             let messageID = args[1]
             if(isNaN(messageID)) return message.reply(`Messsage ID Isn't A Number`) // If Message ID Isn't A Number
             if(!messageID) return message.reply(`No Message ID Provided`) // If No Message ID Is Provided
-            client.giveawaysManager.edit(messageID, { // End GiveAway Using 'edit' Method
-                setEndTimestamp: Date.now() // End It After Some Seconds
-            }).then(() => {
-                message.channel.send(`GiveAway Successfully Ended, Will End In Some Seconds`)
+            client.giveawaysManager.reroll(messageID).then(() => { // Re-Roll GiveAway
+                message.channel.send(`GiveAway Successfully Re-Rolled`)
             }).catch((_err) => { // If Their Is Error...
                 message.reply(`No GiveAway With **${messageID}** Is Available`)
             })
